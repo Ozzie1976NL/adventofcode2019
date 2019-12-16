@@ -25,29 +25,27 @@ class PointTest extends Specification {
         "same location"                 | 2     | 3     | 2      | 3      | 0
     }
 
+
     @Unroll
-    def "test various situations whether two points and an obstacle are in sight: #scenario"() {
+    def "distance and degrees test"() {
         setup:
-        def thisPoint = new Point(thisX, thisY)
-        def otherPoint = new Point(otherX, otherY)
-        def obstacle = new Point(obstacleX, obstacleY)
+        def anotherPoint = new AnotherPoint(otherX, otherY, new Point(originX, originY))
 
         expect:
-        thisPoint.isInLineOfSight(otherPoint, obstacle) == isInLineOfSight
+        verifyAll {
+            anotherPoint.getDistance() == distance
+            anotherPoint.getDegree() == degrees
+        }
 
         where:
-        scenario                                  | thisX | thisY | otherX | otherY | obstacleX | obstacleY | isInLineOfSight
-        "obstacle is in between on x axis"        | 0     | 0     | 10     | 0      | 8         | 0         | false
-        "obstacle is in on other side on x axis"  | 0     | 0     | 10     | 0      | -8        | 0         | true
-        "obstacle is after other point on x axis" | 0     | 0     | 4      | 0      | 8         | 0         | true
-
-        "obstacle is in between on y axis"        | 0     | 0     | 0      | 10     | 0         | 8         | false
-        "obstacle is in on other side on y axis"  | 0     | 0     | 0      | 10     | 0         | -8        | true
-        "obstacle is after other point on y axis" | 0     | 0     | 0      | 4      | 0         | 8         | true
-
-        "obstacle is the same as other"           | 1     | 1     | 2      | 2      | 2         | 2         | false
-
-        "from example"                            | 3     | 4     | 1      | 0      | 2         | 2         | false
-
+        originX | originY | otherX | otherY | distance | degrees
+        0       | 0       | 1      | 0      | 1.000    | 0.0
+        0       | 0       | 1      | 1      | 1.414    | 45
+        0       | 0       | 0      | 1      | 1.000    | 90.0
+        0       | 0       | -1     | 1      | 1.414    | 135.0
+        0       | 0       | -1     | 0      | 1.000    | 180.0
+        0       | 0       | -1     | -1     | 1.414    | 225.0
+        0       | 0       | 0      | -1     | 1.000    | 270.0
+        0       | 0       | 1      | -1     | 1.414    | 315.0
     }
 }

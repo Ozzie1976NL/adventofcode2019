@@ -2,6 +2,7 @@ package com.ozzie.advantofcode.monitoringstation;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 public class Point {
@@ -36,17 +37,20 @@ public class Point {
         return y;
     }
 
-    public boolean isInLineOfSight(Point otherPoint, Point obstacle) {
-        if (this.equals(otherPoint) || this.equals(obstacle) || otherPoint.equals(obstacle)) {
-            return false;
+
+    public BigDecimal atan2(final Point otherPoint) {
+        return BigDecimal.valueOf(Math.atan2(otherPoint.y - (double)y, otherPoint.x - (double)x)).setScale(3, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal degrees(final Point otherPoint) {
+        double degrees = Math.toDegrees(atan2(otherPoint).doubleValue());
+        if(degrees < 0) {
+            degrees += 360;
         }
-        BigDecimal distanceThisOtherPoint = distance(otherPoint);
-        BigDecimal distanceThisObstacle = distance(obstacle);
-        BigDecimal distanceOtherPointObstacle = otherPoint.distance(obstacle);
-        return !distanceThisObstacle.add(distanceOtherPointObstacle).equals(distanceThisOtherPoint);
+        return BigDecimal.valueOf(degrees).setScale(1, RoundingMode.HALF_UP);
     }
 
     public BigDecimal distance(final Point otherPoint) {
-        return BigDecimal.valueOf(otherPoint.x - x).pow(2).add(BigDecimal.valueOf(otherPoint.y - y).pow(2)).sqrt(MathContext.DECIMAL32);
+        return BigDecimal.valueOf(Math.sqrt(Math.pow(otherPoint.getX() - (double)x,2) + Math.pow(otherPoint.getY() - (double)y,2))).setScale(3, RoundingMode.HALF_UP);
     }
 }

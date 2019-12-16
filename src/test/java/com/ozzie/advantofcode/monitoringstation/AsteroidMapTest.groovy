@@ -157,4 +157,8 @@ class AsteroidMapTest extends Specification {
         asteroidMap.getNoMostDetectableAsteroids() == 256
         asteroidMap.getPointsWithMostDetectableAsteroids().get(0) == new Point(29, 28)
     }
+
+    def "atan2 tests"() {
+
+    }
 }
