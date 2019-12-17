@@ -60,7 +60,7 @@ public class IntComputerTests {
 
     @Test
     public void day9_example2_output_16_digit_number() {
-        IntComputer.debug = true;
+        IntComputer.debug = false;
         long[] program = {1102, 34915192, 34915192, 7, 4, 7, 99, 0};
         IntComputer intComputer = new IntComputer(program, inputQueue, outputQueue);
         intComputer.run();

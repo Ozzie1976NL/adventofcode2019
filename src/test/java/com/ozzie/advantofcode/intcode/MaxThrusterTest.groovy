@@ -24,7 +24,7 @@ class MaxThrusterTest extends Specification {
         setup:
         long[] programInt = program
         def maxThrusterSignal = new MaxThrusterSignal(programInt)
-        IntComputer.debug = true;
+        IntComputer.debug = false;
 
         expect:
         long[] phase_settings_sequence_int = phase_settings_sequence

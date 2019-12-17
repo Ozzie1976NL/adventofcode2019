@@ -1,5 +1,7 @@
 package com.ozzie.advantofcode.monitoringstation;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class AsteroidMap {
@@ -7,6 +9,8 @@ public class AsteroidMap {
     private final Set<Point> points = new HashSet<>();
     private final Map<Point, Set<Double>> pointAtan2Other = new HashMap<>();
     private final Map<Integer, List<Point>> noDetectablePointList = new HashMap<>();
+    private  int maxX;
+    private  int maxY;
 
     public AsteroidMap(String stringMap) {
         processMap(stringMap);
@@ -45,6 +49,44 @@ public class AsteroidMap {
                 if (chars[x] == '#') {
                     points.add(new Point(x, y));
                 }
+            }
+        }
+        maxY = lines.length;
+        maxX = lines[0].length();
+    }
+
+
+    public List<Point> shootAllAsteroidsFrom(Point laserStation) {
+        final Map<BigDecimal, Set<AnotherPoint>> allAngleRadiansOtherPointsMap = new HashMap<>();
+        points.stream()
+                .filter(asteroid -> !asteroid.equals(laserStation))
+                .map(asteroid -> new AnotherPoint(asteroid,laserStation))
+        .forEach(anotherPoint -> {
+            final Set<AnotherPoint> anotherPointSet = allAngleRadiansOtherPointsMap.getOrDefault(anotherPoint.getAngleRadians(), new HashSet<>());
+            anotherPointSet.add(anotherPoint);
+            allAngleRadiansOtherPointsMap.put(anotherPoint.getAngleRadians(), anotherPointSet);
+
+        });
+        List<Point> allAsteroidsVaporized = new LinkedList<>();
+        while (!allAngleRadiansOtherPointsMap.isEmpty()) {
+            for(double i = -1.571;  i < 3.142; i += 0.001d ) { // Three quarters
+                vaporizeAsteroidWhenInLineOfSight(allAngleRadiansOtherPointsMap, BigDecimal.valueOf(i).setScale(3, RoundingMode.HALF_UP), allAsteroidsVaporized);
+            }
+            for(double i = -3.142;  i < -1.571; i += 0.001d ) { // Last quarter
+                vaporizeAsteroidWhenInLineOfSight(allAngleRadiansOtherPointsMap, BigDecimal.valueOf(i).setScale(3, RoundingMode.HALF_UP), allAsteroidsVaporized);
+            }
+        }
+        return allAsteroidsVaporized;
+    }
+
+    private void vaporizeAsteroidWhenInLineOfSight(Map<BigDecimal, Set<AnotherPoint>> allAngleRadiansOtherPointsMap, BigDecimal angleRadians, List<Point> vaporizedAsteroids) {
+        if(allAngleRadiansOtherPointsMap.containsKey(angleRadians)) {
+            Set<AnotherPoint> anotherPointsSet = allAngleRadiansOtherPointsMap.get(angleRadians);
+            AnotherPoint nearestAnotherPoint = anotherPointsSet.stream().min(Comparator.comparing(AnotherPoint::getDistance)).get();
+            anotherPointsSet.remove(nearestAnotherPoint);
+            vaporizedAsteroids.add(new Point(nearestAnotherPoint.getX(), nearestAnotherPoint.getY()));
+            if(anotherPointsSet.isEmpty()) {
+                allAngleRadiansOtherPointsMap.remove(angleRadians);
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.ozzie.advantofcode.monitoringstation;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
@@ -18,15 +17,15 @@ public class Point {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Point)) return false;
         Point point = (Point) o;
-        return x == point.x &&
-                y == point.y;
+        return getX() == point.getX() &&
+                getY() == point.getY();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return Objects.hash(getX(), getY());
     }
 
     public int getX() {
@@ -38,12 +37,12 @@ public class Point {
     }
 
 
-    public BigDecimal atan2(final Point otherPoint) {
+    public BigDecimal angleRadians(final Point otherPoint) {
         return BigDecimal.valueOf(Math.atan2(otherPoint.y - (double)y, otherPoint.x - (double)x)).setScale(3, RoundingMode.HALF_UP);
     }
 
     public BigDecimal degrees(final Point otherPoint) {
-        double degrees = Math.toDegrees(atan2(otherPoint).doubleValue());
+        double degrees = Math.toDegrees(angleRadians(otherPoint).doubleValue());
         if(degrees < 0) {
             degrees += 360;
         }

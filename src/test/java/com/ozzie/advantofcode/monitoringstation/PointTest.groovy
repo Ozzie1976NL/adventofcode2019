@@ -35,17 +35,34 @@ class PointTest extends Specification {
         verifyAll {
             anotherPoint.getDistance() == distance
             anotherPoint.getDegree() == degrees
+            anotherPoint.getAngleRadians() == angleRadians
         }
 
         where:
-        originX | originY | otherX | otherY | distance | degrees
-        0       | 0       | 1      | 0      | 1.000    | 0.0
-        0       | 0       | 1      | 1      | 1.414    | 45
-        0       | 0       | 0      | 1      | 1.000    | 90.0
-        0       | 0       | -1     | 1      | 1.414    | 135.0
-        0       | 0       | -1     | 0      | 1.000    | 180.0
-        0       | 0       | -1     | -1     | 1.414    | 225.0
-        0       | 0       | 0      | -1     | 1.000    | 270.0
-        0       | 0       | 1      | -1     | 1.414    | 315.0
+        originX | originY | otherX | otherY | distance | degrees | angleRadians
+        0       | 0       | 1      | 0      | 1.000    | 0.0     | 0
+        0       | 0       | 1      | 1      | 1.414    | 45      | 0.785
+        0       | 0       | 0      | 1      | 1.000    | 90.0    | 1.571
+        0       | 0       | -1     | 1      | 1.414    | 135.0   | 2.356
+        0       | 0       | -1     | 0      | 1.000    | 180.0   | 3.142
+        0       | 0       | -1     | -1     | 1.414    | 225.0   | -2.356
+        0       | 0       | 0      | -1     | 1.000    | 270.0   | -1.571
+        0       | 0       | 1      | -1     | 1.414    | 315.0   | -0.785
+    }
+
+    def "how does the clock go"() {
+        expect:
+        new AnotherPoint(8, 2,new Point(8,3)).getAngleRadians() == -1.571
+        new AnotherPoint(9, 2,new Point(8,3)).getAngleRadians() == -0.785
+        new AnotherPoint(9, 3,new Point(8,3)).getAngleRadians() == 0.000
+        new AnotherPoint(9, 4,new Point(8,3)).getAngleRadians() == 0.785
+        new AnotherPoint(8, 4,new Point(8,3)).getAngleRadians() == 1.571
+        new AnotherPoint(7, 4,new Point(8,3)).getAngleRadians() == 2.356
+        new AnotherPoint(7, 3,new Point(8,3)).getAngleRadians() == 3.142
+        new AnotherPoint(7, 2,new Point(8,3)).getAngleRadians() == -2.356
+
+
+
+
     }
 }
