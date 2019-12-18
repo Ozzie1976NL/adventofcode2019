@@ -1,5 +1,6 @@
 package com.ozzie.advantofcode.monitoringstation
 
+import com.ozzie.advantofcode.common.Point
 import spock.lang.Specification
 
 class AsteroidMapTest extends Specification {

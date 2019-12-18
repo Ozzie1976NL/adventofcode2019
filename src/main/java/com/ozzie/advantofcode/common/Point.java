@@ -1,4 +1,4 @@
-package com.ozzie.advantofcode.monitoringstation;
+package com.ozzie.advantofcode.common;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

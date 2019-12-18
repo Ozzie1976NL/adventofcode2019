@@ -1,5 +1,6 @@
-package com.ozzie.advantofcode.monitoringstation
+package com.ozzie.advantofcode.common
 
+import com.ozzie.advantofcode.monitoringstation.AnotherPoint
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -1,12 +1,14 @@
 package com.ozzie.advantofcode.monitoringstation;
 
+import com.ozzie.advantofcode.common.Point;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
 public class AsteroidMap {
 
-    private final Set<Point> points = new HashSet<>();
+    private final Set<Point>              points          = new HashSet<>();
     private final Map<Point, Set<Double>> pointAtan2Other = new HashMap<>();
     private final Map<Integer, List<Point>> noDetectablePointList = new HashMap<>();
     private  int maxX;

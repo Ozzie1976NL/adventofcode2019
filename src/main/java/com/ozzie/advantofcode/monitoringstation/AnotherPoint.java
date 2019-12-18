@@ -1,5 +1,7 @@
 package com.ozzie.advantofcode.monitoringstation;
 
+import com.ozzie.advantofcode.common.Point;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
