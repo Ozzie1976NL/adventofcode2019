@@ -11,9 +11,9 @@ public class Moon {
 
     public void applyGravity(Moon otherMoon) {
         velocity = new Point3d(
-                velocity.getX() + compareAxis(position.getX(), otherMoon.getPosition().getX()),
-                velocity.getY() + compareAxis(position.getY(), otherMoon.getPosition().getY()),
-                velocity.getZ() + compareAxis(position.getZ(), otherMoon.getPosition().getZ()));
+                velocity.getX() - compareAxis(position.getX(), otherMoon.getPosition().getX()),
+                velocity.getY() - compareAxis(position.getY(), otherMoon.getPosition().getY()),
+                velocity.getZ() - compareAxis(position.getZ(), otherMoon.getPosition().getZ()));
     }
 
     public void applyVelocity() {
