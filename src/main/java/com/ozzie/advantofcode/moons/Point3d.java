@@ -15,13 +15,28 @@ public class Point3d {
         return new Point3d(x + other.x, y + other.y, z + other.z);
     }
 
-    public Point3d applyAsGravity(Point3d other) {
-        return new Point3d()
+    public int getX() {
+        return x;
     }
 
-    private static int applyGravity(int a, int b) {
-        if(a == b) {
-            return a;
-        } else if()
+    public int getY() {
+        return y;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public int absXYZ() {
+        return Math.abs(x) + Math.abs(y) + Math.abs(z);
+    }
+
+    @Override
+    public String toString() {
+        return "Point3d{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }
