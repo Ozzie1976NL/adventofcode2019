@@ -1,5 +1,7 @@
 package com.ozzie.advantofcode.moons;
 
+import java.util.Objects;
+
 public class Moon {
     private Point3d position;
     private Point3d velocity;
@@ -42,5 +44,19 @@ public class Moon {
                 "position=" + position +
                 ", velocity=" + velocity +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Moon moon = (Moon) o;
+        return position.equals(moon.position) &&
+                velocity.equals(moon.velocity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, velocity);
     }
 }

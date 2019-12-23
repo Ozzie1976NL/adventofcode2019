@@ -1,5 +1,7 @@
 package com.ozzie.advantofcode.moons;
 
+import java.util.Objects;
+
 public class Point3d {
     private final int x;
     private final  int y;
@@ -38,5 +40,20 @@ public class Point3d {
                 ", y=" + y +
                 ", z=" + z +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point3d point3d = (Point3d) o;
+        return x == point3d.x &&
+                y == point3d.y &&
+                z == point3d.z;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }
