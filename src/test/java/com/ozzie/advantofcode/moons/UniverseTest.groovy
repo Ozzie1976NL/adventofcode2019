@@ -58,13 +58,12 @@ class UniverseTest extends Specification {
                 new Moon(3, 5, -1)))
 
         when:
-        def noSteps = universe.firstDuplicateSteps()
+        def noSteps = universe.firstDuplicateStepLCM()
 
         then:
         noSteps == 2772
     }
 
-    @Ignore
     def "Day 12 N-Body problem no steps for duplicates example 2"() {
         setup:
         def universe = new Universe(List.of(
@@ -74,12 +73,13 @@ class UniverseTest extends Specification {
                 new Moon(9, -8, -3)))
 
         when:
-        def noSteps = universe.firstDuplicateSteps()
+        def noSteps = universe.firstDuplicateStepLCM()
 
         then:
-        noSteps == 4686774924
+        noSteps == 4_686_774_924
     }
 
+    @Ignore
     def "Day 12 N-Body problem no steps for duplicates puzzle 2"() {
         setup:
         def universe = new Universe(List.of(
@@ -89,7 +89,7 @@ class UniverseTest extends Specification {
                 new Moon(2, -6, 1)))
 
         when:
-        def noSteps = universe.firstDuplicateSteps()
+        def noSteps = universe.firstDuplicateStepsBruteForce()
 
         then:
         noSteps == 4686774924

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Point3d {
     private final int x;
-    private final  int y;
+    private final int y;
     private final int z;
 
     public Point3d(int x, int y, int z) {
@@ -15,6 +15,18 @@ public class Point3d {
 
     public Point3d add(Point3d other) {
         return new Point3d(x + other.x, y + other.y, z + other.z);
+    }
+
+    public Point3d addX(int otherX) {
+        return new Point3d(x + otherX, y, z);
+    }
+
+    public Point3d addY(int otherY) {
+        return new Point3d( x, y + otherY, z);
+    }
+
+    public Point3d addZ(int otherZ) {
+        return new Point3d( x, y , z + otherZ);
     }
 
     public int getX() {
@@ -55,5 +67,9 @@ public class Point3d {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
+    }
+
+    protected Point3d copy() {
+        return new Point3d(x, y, z);
     }
 }
