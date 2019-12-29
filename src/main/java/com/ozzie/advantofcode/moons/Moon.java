@@ -23,45 +23,8 @@ public class Moon {
                 velocity.getZ() - compareAxis(position.getZ(), otherMoon.getPosition().getZ()));
     }
 
-    public void applyGravity(final Moon otherMoon, final Plane plane) {
-        switch (plane) {
-            case X_AXIS:
-                velocity = new Point3d(
-                        velocity.getX() - compareAxis(position.getX(), otherMoon.getPosition().getX()),
-                        velocity.getY(),
-                        velocity.getZ());
-                break;
-            case Y_AXIS:
-                velocity = new Point3d(
-                        velocity.getX(),
-                        velocity.getY() - compareAxis(position.getY(), otherMoon.getPosition().getY()),
-                        velocity.getZ());
-                break;
-            case Z_AXIS:
-                velocity = new Point3d(
-                        velocity.getX(),
-                        velocity.getY(),
-                        velocity.getZ() - compareAxis(position.getZ(), otherMoon.getPosition().getZ()));
-                break;
-        }
-    }
-
     public void applyVelocity() {
         position = position.add(velocity);
-    }
-
-    public void applyVelocity(final Plane plane) {
-        switch (plane) {
-            case X_AXIS:
-                position = position.addX(velocity.getX());
-                break;
-            case Y_AXIS:
-                position = position.addY(velocity.getY());
-                break;
-            case Z_AXIS:
-                position = position.addZ(velocity.getZ());
-                break;
-        }
     }
 
     private static int compareAxis(int cur, int other) {
@@ -102,14 +65,7 @@ public class Moon {
         return Objects.hash(position, velocity);
     }
 
-
     public Moon copy() {
         return new Moon(position.copy(), velocity.copy());
-    }
-
-    public enum Plane {
-        X_AXIS,
-        Y_AXIS,
-        Z_AXIS
     }
 }

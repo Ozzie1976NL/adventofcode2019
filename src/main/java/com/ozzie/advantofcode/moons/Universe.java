@@ -13,13 +13,10 @@ public class Universe {
     }
 
     public void step(int noSteps) {
-//        System.out.println("Initial values:");
         for (Moon moon : moons) {
             System.out.println(moon.toString());
         }
         for (int i = 0; i < noSteps; i++) {
-//            System.out.println();
-//            System.out.println(String.format("Step %d ", i + 1));
             step();
         }
     }
@@ -34,19 +31,11 @@ public class Universe {
                 }
             }
         }
-//        System.out.println("Velocity updated:");
-//        for (Moon moon : moons) {
-//            System.out.println(moon.getVelocity().toString());
-//        }
 
         // Update Position
         for (Moon moon : moons) {
             moon.applyVelocity();
         }
-//        System.out.println("Position updated:");
-//        for (Moon moon : moons) {
-//            System.out.println(moon.getPosition().toString());
-//        }
     }
 
     public int totalEnergy() {
@@ -80,25 +69,20 @@ public class Universe {
     }
 
     public long firstDuplicateStepLCM() {
-        final long multiples[] = new long[Moon.Plane.values().length];
-        for (Moon.Plane plane : Moon.Plane.values()) {
-            final Moon[] currentMoons = copy(moons);
-            int step = 0;
-            do {
-                step ++;
-                for (Moon moon : currentMoons) {
-                    for (Moon otherMoon : currentMoons) {
-                        if (moon != otherMoon) {
-                            moon.applyGravity(otherMoon, plane);
-                        }
-                    }
+        final long multiples[] = new long[Axis.values().length];
+        final Moon[] start = copy(moons);
+        int stepNo = 0;
+        do {
+            stepNo++;
+            step();
+            for (Axis axis : Axis.values()) {
+                if (multiples[axis.ordinal()] == 0 && allValuesEqualOnAxis(start, moons, axis)) {
+                    multiples[axis.ordinal()] = stepNo;
+                    System.out.println(String.format("All moons reach their initial position after %d steps on Axis %s", stepNo, axis.toString()));
                 }
-                for (Moon moon : currentMoons) {
-                    moon.applyVelocity(plane);
-                }
-            } while (!compare(moons, currentMoons, plane));
-            multiples[plane.ordinal()] = step;
-        }
+            }
+        } while (Arrays.stream(multiples).filter(m -> m > 0).count() != Axis.values().length);
+
         return Util.lcm(multiples);
     }
 
@@ -119,30 +103,40 @@ public class Universe {
         return true;
     }
 
-    private static boolean compare(Moon[] initial, Moon[] current, Moon.Plane plane) {
-        for (int i = 0; i < initial.length; i++) {
-            long initialValue, currentValue;
-            switch (plane) {
-                case X_AXIS:
-                    initialValue = initial[i].getPosition().getX();
-                    currentValue = current[i].getPosition().getX();
-                    break;
-                case Y_AXIS:
-                    initialValue = initial[i].getPosition().getY();
-                    currentValue = current[i].getPosition().getY();
-                    break;
-                case Z_AXIS:
-                    initialValue = initial[i].getPosition().getZ();
-                    currentValue = current[i].getPosition().getZ();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Oh oh, this should not happen!");
-            }
-            if (currentValue != initialValue) {
+    private static boolean allValuesEqualOnAxis(Moon[] aMoons, Moon[] bMoons, Axis axis) {
+        for (int i = 0; i < aMoons.length; i++) {
+            if (!allValuesEqualOnAxis(aMoons[i], bMoons[i], axis)) {
                 return false;
             }
         }
         return true;
+    }
+
+    private static boolean allValuesEqualOnAxis(Moon moonA, Moon moonB, Axis axis) {
+        return allValuesEqualOnAxis(moonA.getPosition(), moonB.getPosition(), axis) &&
+                allValuesEqualOnAxis(moonA.getVelocity(), moonB.getVelocity(), axis);
+    }
+
+    private static boolean allValuesEqualOnAxis(Point3d pointA, Point3d pointB, Axis axis) {
+        int a;
+        int b;
+        switch (axis) {
+            case X:
+                a = pointA.getX();
+                b = pointB.getX();
+                break;
+            case Y:
+                a = pointA.getY();
+                b = pointB.getY();
+                break;
+            case Z:
+                a = pointA.getZ();
+                b = pointB.getZ();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown back to the future axis encountered!");
+        }
+        return a == b;
     }
 
     public String toString() {
