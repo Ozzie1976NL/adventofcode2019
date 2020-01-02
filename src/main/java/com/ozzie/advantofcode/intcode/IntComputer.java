@@ -7,30 +7,32 @@ import java.util.Queue;
 
 public class IntComputer {
     public static boolean debug = false;
-
+    private final long[] originalProgram;
     private final Queue<Long> inputQueue;
     private final Queue<Long> outputQueue;
-    private final long[]      memory;
-    private       State       state              = State.READY;
-    private       int         instructionPointer = 0;
-    private       int         relativeBase       = 0;
-    private       Opcode      opcode;
-    private       List<Mode>  paramModes         = new LinkedList<>();
-    private       long        param1             = 0;
-    private       long        param2             = 0;
-    private       long        param3             = 0;
+    private final long[] memory;
+    private State state = State.READY;
+    private int instructionPointer = 0;
+    private int relativeBase = 0;
+    private Opcode opcode;
+    private List<Mode> paramModes = new LinkedList<>();
+    private long param1 = 0;
+    private long param2 = 0;
+    private long param3 = 0;
     int outputOffset = 0;
 
 
     public IntComputer(String program, Queue<Long> inputQueue, Queue<Long> outputQueue) {
-        this(Arrays.stream(program.split(",")).mapToLong(Long::valueOf).toArray(), inputQueue,outputQueue);
+        this(Arrays.stream(program.split(",")).mapToLong(Long::valueOf).toArray(), inputQueue, outputQueue);
     }
 
     public IntComputer(long[] program, Queue<Long> inputQueue, Queue<Long> outputQueue) {
         this.inputQueue = inputQueue;
         this.outputQueue = outputQueue;
         this.memory = new long[program.length * 10];
+        this.originalProgram = new long[program.length];
         System.arraycopy(program, 0, this.memory, 0, program.length);
+        System.arraycopy(program, 0, this.originalProgram, 0, program.length);
     }
 
     public State run() {
@@ -202,7 +204,7 @@ public class IntComputer {
                 outputOffset = (int) memory[instructionPointer + paramNo];
                 break;
             case RELATIVE:
-                outputOffset = relativeBase + (int)memory[instructionPointer + paramNo];
+                outputOffset = relativeBase + (int) memory[instructionPointer + paramNo];
                 break;
             case IMMEDIATE:
             default:
@@ -258,5 +260,15 @@ public class IntComputer {
 
     public long[] getMemory() {
         return memory;
+    }
+
+    public void reset() {
+        Arrays.fill(memory, 0L);
+        System.arraycopy(originalProgram, 0, this.memory, 0, originalProgram.length);
+        state = State.READY;
+        inputQueue.clear();
+        outputQueue.clear();
+        instructionPointer = 0;
+        relativeBase = 0;
     }
 }
